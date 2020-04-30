@@ -20,16 +20,29 @@ class Positioning:
             raise ValueError("Positioning.py: Provided invalid direction.{}".format(d))
 
 
+    #Get state
     def get(self):
         return ((self.row, self.column), self.d)
     
     def get_coords(self):
-        return self.row, self.column
+        return (self.row, self.column)
 
     def get_direction(self):
         return self.d
 
 
+    #Update
+    def update_row(self, xn):
+        self.x = xn
+    
+    def update_col(self, yn):
+        self.y = yn
+
+    def update_direction(dn):
+        self.d = dn
+
+
+    #Options, General
     def directions(self):
         return ['LEFT', 'RIGHT', 'UP','DOWN']
     
