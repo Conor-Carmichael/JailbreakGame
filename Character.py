@@ -12,19 +12,26 @@
 class Character:
 
 
-    def __init__(self, position, step, image):
+    def __init__(self, position, step, size):
         self.position = position                 #Positioning Object
         self.step = step                         #How many pixels to move each step 
-        self.image = image                       #Image to repr character
+        self.size = size                       #Image to repr character
     
-    # def valid_move()
+    def valid_move(self, new_coords, map_bounds):
+        new_x, new_y = new_coords
+        x_lim, y_lim = map_bounds
 
-    def step(self):
+        if new_x+self.size[0] >= x_lim or new_x < 0 or new_y+self.size[1] >= y_lim or new_y < 0:
+            return False
+        else:
+            return True
+
+    def step(self, map_bounds):
         d = self.position.get_direction()
         r, c = self.get_coords
 
         if d=='RIGHT':
-            self.position.update_col(c+self.step)
+            self.position.update_col(c+self.step) if self.valid_move((), map)
         elif d=='LEFT':
             self.position.update_col(c-self.step)
 

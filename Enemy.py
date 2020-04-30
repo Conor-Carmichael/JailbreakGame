@@ -7,12 +7,12 @@
 #################################################################
 
 from Character import Character
-
+import random
 
 
 class Enemy(Character):
 
-    def __init__(self, turn_probability, sight_range, position, step, image):
+    def __init__(self, turn_probability, movement_probability, sight_range, position, step, image):
         super().__init__(position, step, image)
 
         self.turn_probability = turn_probability
@@ -86,7 +86,18 @@ class Enemy(Character):
                 col_low = max(0, enemy_col-vision_cone_width)
                 col_high = min(col_limit, enemy_col+1+vision_cone_width)
                 
-                add_to_fov = coord_grid[row,  col_low:col_high  ]
+                add_to_fov = coord_grid[row, col_low:col_high]
                 fov.extend(add_to_fov)
 
         return fov
+
+
+    def turn(self):
+        if random.random() < self.turn_probability:
+            self.direction = random.random_choice(self.position.directions().remove(self.position.get_direction()))
+
+    def move(self):
+        if random.random() < self.movement_probability:
+            super.move()
+
+        
