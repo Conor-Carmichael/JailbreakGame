@@ -9,19 +9,22 @@
 
 class Positioning:
 
-    """ Holds an X, Y tuple, and direction """
+    """ Holds an X, column tuple, and direction """
 
-    def __init__(self, x, y, d):
-        self.x = X
-        self.y = y 
-        self.d = d if d in self.directions() else raise ValueError("Positioning.py: Provided invalid direction.{}".format(d))
+    def __init__(self, row, column, d):
+        self.row = row
+        self.column = column 
+        if d in self.directions():
+            self.d = d
+        else: 
+            raise ValueError("Positioning.py: Provided invalid direction.{}".format(d))
 
 
     def get(self):
-        return ((self.x, self.y), self.d)
+        return ((self.row, self.column), self.d)
     
     def get_coords(self):
-        return self.x, self.y
+        return self.row, self.column
 
     def get_direction(self):
         return self.d
@@ -31,4 +34,4 @@ class Positioning:
         return ['LEFT', 'RIGHT', 'UP','DOWN']
     
     def print_pos(self):
-        print("FACING: {} @ ({}, {})".format(self.d, self.x, self.y))
+        print("FACING: {} @ ({}, {})".format(self.d, self.row, self.column))

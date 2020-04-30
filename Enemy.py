@@ -6,22 +6,26 @@
 #                                                               #
 #################################################################
 
-import Character.py
+from Character import Character
 
 
 
 class Enemy(Character):
 
-    def __init__(self, turn_probability, sight_range, *args, **kw):
-        super().__init__( *args, **kw)
+    def __init__(self, turn_probability, sight_range, **kwds):
+        super().__init__(**kwds)
 
         self.turn_probability = turn_probability
-        self.sight_range = sight_range
+
+        if sight_range >= 2:
+            self.sight_range = sight_range         
+        else:
+            raise ValueError('Sight Range value must be greater than one.')
 
 
     # I tested this in colab notebook. 
     # NEED TO SET UP BOUNDS
-    def calculate_fov(self, coord_grid):
+    def get_fov(self, coord_grid):
         # Returns an array of the pixels that are in the fov
         # https://keisan.casio.com/exec/system/1273849260
         # The FOV is a right isoceles triangle
@@ -31,8 +35,9 @@ class Enemy(Character):
 
         fov = []
 
-        x, y = self.position.get_coords()[0], self.position.get_coords()[1]
-        x_limit, y_limit = len(coord_grid), len(coord_grid[0])
+        enemy_row, enemy_col = self.position.get_coords()[0], self.position.get_coords()[1]
+        row_limit, col_limit = len(coord_grid), len(coord_grid[0])
+
         direction = self.position.get_direction()
     
         horizontal = direction in ['LEFT', 'RIGHT'] # Working with cols or rows for fov
@@ -41,40 +46,48 @@ class Enemy(Character):
         # Doubles as step in range()
         range_multp = 1 if direction in ['RIGHT', 'DOWN'] else -1 
         
-        vision_cone_width = self.sight_range # Will be decremented to get thinning cone
-
 
         if horizontal:
             # Enemy FOV extends horizontally
 
             # Upper bound for loop(), step will be -1 if left
-            upper_bound = y + (1 + self.sight_range)*range_multp
-            upper_bound = min(upper_bound, y_limit) # CACCOUNT FO RLEFT
-            for col in reversed(range(y, upper_bound, range_multp)):
+            upper_bound = enemy_col + (1 + self.sight_range)*range_multp
+            upper_bound = min(upper_bound, col_limit) if direction == 'RIGHT' else max(upper_bound, -1) # IF right, cant go beyond max width, if left cant go further left than 0
+                                                                                                                
+
+            for col in reversed(range(enemy_col, upper_bound, range_multp)):
                 # Start with the biggest part of triangle fov
                 # walk back, taking one off each side at a time
                 # Will converge with enemy location
 
-                # Dont go out of bounds
-                x_low = max(0, x-vision_cone_width) 
-                x_high = min(x_limit, x+vision_cone_width+1)
+                vision_cone_width = abs(col - enemy_col)
 
-                add_to_fov = coord_grid[ : , col]
+                # Dont go out of bounds
+                row_low = max(0, enemy_row-vision_cone_width)          #Checks to make sure the horizotal fov wont go above the viewport
+                row_high = min(row_limit, enemy_row+vision_cone_width+1) #Checks to make sure horizontal fov wont go below viewport
+
+                add_to_fov = coord_grid[row_low:row_high, col]
                 fov.extend(add_to_fov)
-                vision_cone_width -= 1
 
         else:
             # Enemy FOV extends vertically
 
             # Loop upper bound for range(), if its up the step will be -1
-            upper_bound = x + (1 + self.sight_range)*range_multp
-            upper_bound = min(upper_bound, x_limit)
-            for row in reversed(range(x, upper_bound, range_multp)):
+            upper_bound = enemy_row + (1 + self.sight_range)*range_multp
+            upper_bound = min(upper_bound, row_limit) if direction == 'DOWN' else max(-1, upper_bound) # will be uninclusive range, so -1 is ok
+
+            for row in reversed(range(enemy_row, upper_bound, range_multp)):
                 # Start with the biggest part of triangle fov
                 # walk back, taking one off each side at a time
                 # Will converge with enemy location
-                add_to_fov = coord_grid[row, y-vision_cone_width : y+1+vision_cone_width ]
+
+                vision_cone_width = abs(row - enemy_row)
+
+                # Ensures not to index out of bounds on the coordinate grid.
+                col_low = max(0, enemy_col-vision_cone_width)
+                col_high = min(col_limit, enemy_col+1+vision_cone_width)
+
+                add_to_fov = coord_grid[row,  col_low:col_high  ]
                 fov.extend(add_to_fov)
-                vision_cone_width -= 1
 
         return fov
