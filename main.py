@@ -32,11 +32,11 @@ for row in range(RESOLUTION[0]):
 coord_grid = np.asarray(coord_grid)
 
 
-colors = {
-    'k': (0,0,0),
-    'w': (255,255,255, 100),
-    'flashlight': (100, 150, 0)
-}
+# colors = {
+#     'k': (0,0,0),
+#     'w': (255,255,255, 100),
+#     'flashlight': 
+# }
 
 DISPLAY_SURFACE.fill(colors['w'])
 
@@ -57,9 +57,6 @@ user_character = Character(user_start_pos, 10, None)
 
 pix_obj = pygame.PixelArray(DISPLAY_SURFACE)
 
-for vision in enemy_one.get_fov(coord_grid):
-    # Would filter out elements of the map first
-    pix_obj[vision[1]][vision[0]] = colors['flashlight'] #Reversed?
 
 for vision in enemy_two.get_fov(coord_grid):
     # Would filter out elements of the map first
