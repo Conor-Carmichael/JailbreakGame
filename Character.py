@@ -6,18 +6,21 @@
 #                                                               #
 #                                                               #
 #################################################################
-from global_values import *
-
+import pygame
+from GlobalValues import *
 
 
 class Character:
 
+    char_id = 0
 
-    def __init__(self, position, step, size):
-        self.position = position                 #Positioning Object
-        self.step = step                         #How many pixels to move each step 
-        self.size = size                       #Image to repr character
-    
+    def __init__(self, position, image):
+        self.position = position                #Positioning Object
+        self.image = pygame.image.load(image)                      #Image to repr character
+        self.id = Character.char_id             # id stores the item in gamestate
+        Character.char_id += 1
+
+
     def valid_move(self, new_coords, map_bounds):
         new_x, new_y = new_coords
         x_lim, y_lim = map_bounds
@@ -27,25 +30,24 @@ class Character:
         else:
             return True
 
-    def step(self, map_bounds):
-        r, c, d = self.position.get() # Row, Column, Direction
+    def move(self):
+        x, y, d = self.position.get() # Row, Column, Direction
 
         if d==RIGHT:
-            self.position.update_col(c+self.step)
+            self.position.update_x(x+STEP)
         elif d==LEFT:
-            self.position.update_col(c-self.step)
-
+            self.position.update_x(x-STEP)
         elif d==DOWN:
-            self.position.update_row(r+self.step)
+            self.position.update_y(y+STEP)
         elif d==UP:
-            self.position.update_row(r-self.step)
-        
+            self.position.update_y(y-STEP)
 
     def turn(self, new_dir):
         self.position.update_direction(new_dir)
-
     
-    def get_pos(self):
-        return self.position
+    def get_loc(self):
+        return self.position.get_coords()
         
+    def get_dir(self):
+        return self.position.get_direction()
         
