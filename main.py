@@ -6,14 +6,15 @@ from Positioning import Positioning
 # import Character, Positioning, Enemy
 
 from pygame.locals import *
+from global_values import *
+
 
 
 
 pygame.init()
 
 #Important Variables 
-RESOLUTION = (1280, 720)
-UP, DOWN, LEFT, RIGHT = 'UP','DOWN','LEFT','RIGHT'
+RESOLUTION =RESOLUTION_OPTIONS[0]
 FPS = 60
 DISPLAY_SURFACE = pygame.display.set_mode(RESOLUTION, 0, 32)
 
@@ -38,15 +39,15 @@ coord_grid = np.asarray(coord_grid)
 #     'flashlight': 
 # }
 
-DISPLAY_SURFACE.fill(colors['w'])
+DISPLAY_SURFACE.fill(COLORS['background'])
 
 #Creating characters
 
-enemy_one_start_pos = Positioning(100, 100, DOWN)
-enemy_two_start_pos = Positioning(100, 400, DOWN)
+enemy_one_start_pos = Positioning(50, 50, UP)
+# enemy_two_start_pos = Positioning(100, 400, DOWN)
 
-enemy_one = Enemy(0, 90, enemy_one_start_pos, 10, None)
-enemy_two = Enemy(0, 90, enemy_two_start_pos, 10, None)
+enemy_one = Enemy(0.0, 0.0, 90, enemy_one_start_pos, 10, None)
+# enemy_two = Enemy(0, 0.0, 90, enemy_two_start_pos, 10, None)
 
 
 user_start_pos = Positioning(400, 500, UP)
@@ -58,9 +59,9 @@ user_character = Character(user_start_pos, 10, None)
 pix_obj = pygame.PixelArray(DISPLAY_SURFACE)
 
 
-for vision in enemy_two.get_fov(coord_grid):
+for vision in enemy_one.get_fov():
     # Would filter out elements of the map first
-    pix_obj[vision[1]][vision[0]] = colors['flashlight'] #Reversed?
+    pix_obj[vision[1]][vision[0]] = COLORS['flashlight'] #Reversed?
 
 del pix_obj # Unlock board
 

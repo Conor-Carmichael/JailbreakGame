@@ -6,45 +6,50 @@
 #                                                               #
 #                                                               #
 #################################################################
+from global_values import *
+
 
 class Positioning:
 
-    """ Holds an X, column tuple, and direction """
+    """       Holds X, Y, and direction        """
 
-    def __init__(self, row, column, d):
-        self.row = row
-        self.column = column 
-        if d in self.directions():
+    def __init__(self, x=0, y=0, d=0):
+        self.x = x
+        self.y = y 
+        if d in range(0, 4):
             self.d = d
         else: 
-            raise ValueError("Positioning.py: Provided invalid direction.{}".format(d))
+            raise ValueError("Positioning.py: Provided invalid direction. {}".format(d))
 
 
     #Get state
     def get(self):
-        return ((self.row, self.column), self.d)
+        return (self.x, self.y, self.d)
     
     def get_coords(self):
-        return (self.row, self.column)
+        return (self.x, self.y)
 
     def get_direction(self):
         return self.d
 
 
     #Update
-    def update_row(self, xn):
+    def update_x(self, xn):
         self.x = xn
     
-    def update_col(self, yn):
+    def update_y(self, yn):
         self.y = yn
 
-    def update_direction(dn):
+    def update_direction(self, dn):
         self.d = dn
 
 
-    #Options, General
-    def directions(self):
-        return ['LEFT', 'RIGHT', 'UP','DOWN']
+    #General
+    
+    def direction_string(self):
+        # I repr direction as int for space, to get value index into this arr
+        return ['LEFT','UP','RIGHT','DOWN']
+
     
     def print_pos(self):
-        print("FACING: {} @ ({}, {})".format(self.d, self.row, self.column))
+        print("FACING: {} @ ({}, {})".format(self.direction_string(self.d), self.row, self.column))

@@ -6,6 +6,7 @@
 #                                                               #
 #                                                               #
 #################################################################
+from global_values import *
 
 
 
@@ -27,17 +28,16 @@ class Character:
             return True
 
     def step(self, map_bounds):
-        d = self.position.get_direction()
-        r, c = self.get_coords
+        r, c, d = self.position.get() # Row, Column, Direction
 
-        if d=='RIGHT':
-            self.position.update_col(c+self.step) if self.valid_move((), map)
-        elif d=='LEFT':
+        if d==RIGHT:
+            self.position.update_col(c+self.step)
+        elif d==LEFT:
             self.position.update_col(c-self.step)
 
-        elif d=='DOWN':
+        elif d==DOWN:
             self.position.update_row(r+self.step)
-        elif d=='UP':
+        elif d==UP:
             self.position.update_row(r-self.step)
         
 
