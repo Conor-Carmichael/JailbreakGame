@@ -6,7 +6,7 @@
 #                                                               #
 #################################################################
 
-from Character import Character
+from Characters.Character import Character 
 from GlobalValues import *
 import random, pygame
 
@@ -18,17 +18,16 @@ class Enemy(Character):
     def __init__(self, flashlight_range, positioning, image):
         # Pass character attributes up
         super().__init__(positioning, image)
+        self.id = 'enemy-'+str(Enemy.enemy_count)
 
         self.flashlight_range = self.check_light_range(flashlight_range)
-
         self.turn_p = 0.01                #Probability of turning at each tick
         self.movement_p = 0.01            #Probability of taking a step at each tick
-        self.turn_cooldown = 100
-        self.move_cooldown = 0
-        self.steps_per_move = 50 # What to set the cooldown too to step this many
+        self.turn_cooldown = 100          #How many ticks between each turn minimum
+        self.move_cooldown = 0            #When a step is initiated, this is how many ticks to walk for
+        self.steps_per_move = 50          #Used to set the cooldown too to step this many
+
         Enemy.enemy_count += 1
-
-
 
 
     def get_flashlight_points(self, width=1.0):
@@ -48,6 +47,7 @@ class Enemy(Character):
         elif direction==2:
             b = (a[0]+self.flashlight_range, a[1]-self.flashlight_range*width)
             c = (a[0]+self.flashlight_range, a[1]+self.flashlight_range*width)
+            
         elif direction==3:
             b = (a[0]-self.flashlight_range*width, a[1]+self.flashlight_range)
             c = (a[0]+self.flashlight_range*width, a[1]+self.flashlight_range)

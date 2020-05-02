@@ -12,14 +12,13 @@ from GlobalValues import *
 
 class Character:
 
-    char_id = 0
 
     def __init__(self, position, image):
         self.position = position                #Positioning Object
         self.image = pygame.image.load(image)  #Image to repr character
-        self.size = (self.image.get_rect()[2], self.image.get_rect()[3])
-        self.id = Character.char_id             # id stores the item in gamestate
-        Character.char_id += 1
+        image_rect = self.image.get_rect()
+        self.size = (image_rect[2], image_rect[3])
+
 
 
     def valid_move(self, new_coords, map_bounds):

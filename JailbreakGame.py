@@ -4,17 +4,18 @@ from pygame.locals import *
 
 # My Files
 from GlobalValues import *
-from Character import  Character
-from Enemy import Enemy
-from Positioning import Positioning
-from GameState import GameState
+from Characters.Character import  Character
+from Characters.Enemy import Enemy
+from GameControl.Positioning import Positioning
+from GameControl.GameState import GameState
 
-import time
+# import time
 
 
 class JailbreakGame:
 
     """ Class to control the Jailbreak Game """
+    """   """
 
     def __init__(self, resolution):
 
@@ -49,9 +50,6 @@ class JailbreakGame:
     def create_map(self):
         return
 
-     
-
-
         
     def create_enemies(self, count=1, spawn_seeds=None):
         #Spawn seeds: arr of tuples, (mean x, mean y)
@@ -70,7 +68,7 @@ class JailbreakGame:
 
 
     def update(self, display_surface, game_state, new_state):
-
+        # new state values are the character and the type of character
         for character in new_state.values():
             #Get location to erase
             old_loc = game_state.get(character.id)[0] 
@@ -78,7 +76,7 @@ class JailbreakGame:
             to_erase = (old_rect[0] + old_loc[0], old_rect[1] + old_loc[1], old_rect[2] + old_loc[0],  old_rect[3] + old_loc[1]) 
 
             pygame.draw.polygon(display_surface, COLORS['background'], game_state.get(character.id)[1])  # Erase old light
-            display_surface.fill(COLORS['background'], to_erase)                #Erase at old enemy points
+            display_surface.fill(COLORS['background'], to_erase) # Erase at old enemy points
             
             display_surface.blit(character.image, character.get_loc())          #Draw new enemy
             if True: # Need to check if its a enemy to draw light
