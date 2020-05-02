@@ -3,7 +3,7 @@ LEFT, UP, RIGHT, DOWN = 0, 1, 2, 3 # Directions represented numerically
 DIRECTIONS = [LEFT, UP, RIGHT, DOWN]
 
 #Character related
-STEP = 10
+STEP = 2
 ENEMY_FLASHLIGHT_MULTIPLIER = 0.6
 FLASHLIGHT_RANGE = 200
 ENEMY_IMG = './Images/Enemy.png'

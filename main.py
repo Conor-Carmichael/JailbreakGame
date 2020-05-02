@@ -36,37 +36,37 @@ enemy_two_start_pos.set_rand(100, 200, 25)
 
 
 enemy_img = pygame.image.load('Images/Enemy.png')
+print(enemy_img.get_rect())
+# enemy_one = Enemy(0, 0, 90, enemy_one_start_pos, enemy_img)
+# enemy_two = Enemy(0, 0, 90, enemy_two_start_pos, enemy_img)
 
-enemy_one = Enemy(0, 0, 90, enemy_one_start_pos, enemy_img)
-enemy_two = Enemy(0, 0, 90, enemy_two_start_pos, enemy_img)
-
-DISPLAY_SURFACE.blit(enemy_one.image, enemy_one.get_pos())
-DISPLAY_SURFACE.blit(enemy_two.image, enemy_two.get_pos())
-
-
-
-print(enemy_one.id, enemy_two.id)
-
-# user_start_pos = Positioning(400, 500, UP)
-# user_img = pygame.image.load('Images/Protagonist_upsc.png')
-# user_character = Character(user_start_pos, 10, None)
+# DISPLAY_SURFACE.blit(enemy_one.image, enemy_one.get_pos())
+# DISPLAY_SURFACE.blit(enemy_two.image, enemy_two.get_pos())
 
 
 
-# pix_obj = pygame.PixelArray(DISPLAY_SURFACE)
+# print(enemy_one.id, enemy_two.id)
+
+# # user_start_pos = Positioning(400, 500, UP)
+# # user_img = pygame.image.load('Images/Protagonist_upsc.png')
+# # user_character = Character(user_start_pos, 10, None)
 
 
-# for vision in enemy_one.get_fov():
-#     # Would filter out elements of the map first
-#     pix_obj[vision[1]][vision[0]] = COLORS['flashlight'] #Reversed?
 
-# del pix_obj # Unlock board
+# # pix_obj = pygame.PixelArray(DISPLAY_SURFACE)
 
-while True:
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
 
-    pygame.display.update()
-    fpsClock.tick(FPS)
+# # for vision in enemy_one.get_fov():
+# #     # Would filter out elements of the map first
+# #     pix_obj[vision[1]][vision[0]] = COLORS['flashlight'] #Reversed?
+
+# # del pix_obj # Unlock board
+
+# while True:
+#     for event in pygame.event.get():
+#         if event.type == QUIT:
+#             pygame.quit()
+#             sys.exit()
+
+#     pygame.display.update()
+#     fpsClock.tick(FPS)

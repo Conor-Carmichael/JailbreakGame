@@ -21,10 +21,11 @@ class Enemy(Character):
 
         self.flashlight_range = self.check_light_range(flashlight_range)
 
-        self.turn_p = 0.05                #Probability of turning at each tick
-        self.movement_p = 0.2            #Probability of taking a step at each tick
+        self.turn_p = 0.01                #Probability of turning at each tick
+        self.movement_p = 0.01            #Probability of taking a step at each tick
         self.turn_cooldown = 100
-
+        self.move_cooldown = 0
+        self.steps_per_move = 50 # What to set the cooldown too to step this many
         Enemy.enemy_count += 1
 
 
@@ -78,9 +79,11 @@ class Enemy(Character):
             return False
 
 
-    def chance_move(self):
-        if random.random() < self.movement_p:
-            super(Enemy, self).move()
+    def chance_move(self, bound):
+        if self.move_cooldown > 0 :
+            super(Enemy, self).move(bound)
+            self.move_cooldown -=1
             return True
-        else:
-            return False
+        elif random.random() < self.movement_p:
+            self.move_cooldown = self.steps_per_move 
+        return False
