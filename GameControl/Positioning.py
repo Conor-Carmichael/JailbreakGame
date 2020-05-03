@@ -54,7 +54,7 @@ class Positioning:
     def generate_in_norm_dist(self, mean_x=200, mean_y=200, variance=50):
         x = np.random.normal(mean_x, variance)
         y = np.random.normal(mean_y, variance)
-        return (x, y)
+        return (int(x), int(y))
 
     def direction_valid(self, d):
         if d in range(0, 4):
