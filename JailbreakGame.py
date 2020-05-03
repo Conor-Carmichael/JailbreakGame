@@ -3,19 +3,21 @@ import numpy as np
 from pygame.locals import *
 
 # My Files
+from lib import *
 from GlobalValues import *
 from Characters.Character import  Character
 from Characters.Protagonist import  Protagonist
 from Characters.Enemy import Enemy
 from GameControl.Positioning import Positioning
 from GameControl.GameState import GameState
+from GameControl.GameMap import GameMap
 
 # import time
 
 
 class JailbreakGame:
 
-    """ Class to control the Jailbreak Game """
+    """                Class to control the Jailbreak Game                   """
     """  Code for game management, that is universal (ie not map dependent)  """
 
     def __init__(self, resolution):
@@ -23,6 +25,7 @@ class JailbreakGame:
         self.resolution = resolution
         self.enemies = []
         self.protagonist = None
+
 
     def setup(self):
         # Does the every-match setup and initialization
@@ -37,8 +40,6 @@ class JailbreakGame:
     def run(self, display, enemy, fps_clock, fps):
         return
     
-
-        
     def create_enemies(self, count=1, spawn_seeds=None):
         #Spawn seeds: arr of tuples, (mean x, mean y)
         enemies = []
@@ -53,7 +54,6 @@ class JailbreakGame:
             enemies.append(e)
 
         self.enemies = enemies
-
 
     def control_handler(self, pressed, user):
         # Returns True if user moved
@@ -76,24 +76,17 @@ class JailbreakGame:
         else:
             return False
 
-
     def redraw(self, display_surface, game_state, new_state):
         # new state values are the character and the type of character
         for character in new_state.values():
             #Get location to erase
             old_loc = game_state.get_character_loc(character.id)
             to_erase = (old_loc[0] , old_loc[1], character.size[0], character.size[1])
-            # if character.id == 'protagonist':
 
-            #     print(old_loc, character.get_loc())
-            #     print(character.size)
-            #     print(to_erase)
-            #     print()
-
-            display_surface.fill(COLORS['background'], to_erase) # Erase at old character
+            display_surface.fill(COLORS['floor'], to_erase) # Erase at old character
 
             if 'enemy' in character.id:
-                pygame.draw.polygon(display_surface, COLORS['background'], game_state.get_enemy_light_loc(character.id))  # Erase old light
+                pygame.draw.polygon(display_surface, COLORS['floor'], game_state.get_enemy_light_loc(character.id))  # Erase old light
                 new_light_points = character.get_flashlight_points(ENEMY_FLASHLIGHT_MULTIPLIER)
                 pygame.draw.polygon(display_surface, 
                                     COLORS['flashlight'], 
@@ -106,22 +99,21 @@ class JailbreakGame:
 
 
 
-
-# enemy_light = pygame.draw.polygon(display, COLORS['flashlight'], enemy_one.get_flashlight_points(0.5))
-
-
 # Using to test everything
 if __name__ == '__main__':
-    res = RESOLUTION_OPTIONS[3]
+    res = RESOLUTION_OPTIONS[2]
     game = JailbreakGame(res)
     display_surface, fps_clock = game.setup()
 
-    display_surface.fill(COLORS['background'])
+    # display_surface.fill(COLORS['floor'])
+    game_map = GameMap('./GameControl/Maps/map_one.txt', display_surface)
+
     game.create_enemies(count=2, spawn_seeds=[(400, 500, 2), (900, 100, 3)])
     prot_pos = Positioning(100, 100, RIGHT)
     protagonist = Protagonist(prot_pos, PROTAGONIST_IMAGE)
     game_state = GameState(game.enemies, protagonist, None)
-
+    protag_loc = protagonist.get_loc()
+    print('PROTAG BOUND: ', get_corner_coords(protag_loc[0], protag_loc[1], protagonist.size))
     while True:
 
         prot_moved = False

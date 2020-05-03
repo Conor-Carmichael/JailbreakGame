@@ -41,9 +41,11 @@ class GameState:
         for i in range(Enemy.enemy_count):
             sight = self.light_locations['enemy-'+str(i)+'-light']
             if distance(self.get_character_loc('enemy-'+str(i)), protag_loc) <= FLASHLIGHT_RANGE:
-                for corner in get_corner_coords(protag_loc[0], protag_loc[1], self.protagonist.size):
+                for corner in get_corner_coords(protag_loc[0], protag_loc[1], self.protagonist.size): # Check if corners are in sight
                     result, main_area = is_inside_triangle(sight, protag_loc, main_area)
                     if result:
+                        print('Corner contact at ', corner, ' location ', protag_loc)
+                        print(sight)
                         return True
         
         return False

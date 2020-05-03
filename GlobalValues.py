@@ -12,10 +12,18 @@ ENEMY_IMG = './Images/Enemy.png'
 
 #
 COLORS = {
-    'background': (125, 125, 125),
+    'floor': (125, 125, 125),
     'obstacle': (80, 80, 80),
+    'door':(255,0,0),
     'wall': (30, 30, 30),
     'flashlight': (225, 245, 164),
+}
+
+MAP_KEYS = {
+    '#': 'wall',
+    '.': 'floor',
+    '/': 'door'
+
 }
 
 #Game settings
