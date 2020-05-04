@@ -17,7 +17,6 @@ class Character:
         self.image = pygame.image.load(image)  #Image to repr character
         image_rect = self.image.get_rect()
         self.size = (image_rect[2], image_rect[3])
-        self.rect = 
 
 
 
@@ -30,26 +29,29 @@ class Character:
         else:
             return True
 
-    def move(self, map_bound, ):
-        x, y, d = self.position.get() # Row, Column, Direction
+    def move(self, game_map):
+        x, y, d = self.position.get()
 
         if d==RIGHT:
             # dont if x + step + width > bound[0]
-            if x + STEP + self.size[0] > map_bound[0]:
-                return
-            self.position.update_x(x+STEP)
+            relev_bound = (x + STEP + self.size[0], y)
+
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+                self.position.update_x(x+STEP)
         elif d==LEFT:
-            if x - STEP < 0:
-                return
-            self.position.update_x(x-STEP)
+            relev_bound = (x - STEP, y)
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+                self.position.update_x(x-STEP)
         elif d==DOWN:
-            if y + STEP + self.size[1] > map_bound[1]:
-                return
-            self.position.update_y(y+STEP)
+            relev_bound = (x, y + STEP + self.size[1])
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+                self.position.update_y(y+STEP)
         elif d==UP:
-            if y - STEP < 0:
-                return
-            self.position.update_y(y-STEP)
+            relev_bound = (x, y - STEP)
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+                self.position.update_y(y-STEP)
+
+        
 
     def turn(self, new_dir):
         self.position.update_direction(new_dir)

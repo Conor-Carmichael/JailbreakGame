@@ -79,9 +79,9 @@ class Enemy(Character):
             return False
 
 
-    def chance_move(self, bound):
+    def chance_move(self, m):
         if self.move_cooldown > 0 :
-            super(Enemy, self).move(bound)
+            super(Enemy, self).move(m)
             self.move_cooldown -=1
             return True
         elif random.random() < self.movement_p:

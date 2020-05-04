@@ -26,6 +26,7 @@ class JailbreakGame:
         self.enemies = []
         self.protagonist = None
         self.pause = False
+        self.map = None
         # self.camera
 
 
@@ -39,7 +40,7 @@ class JailbreakGame:
         
         return DISPLAY_SURFACE, fpsClock
 
-    def run(self, display, enemy, fps_clock, fps):
+    def run(self, display, enemy, fps_clock, fps, map):
         return
     
     def create_enemies(self, count=1, spawn_seeds=None):
@@ -61,19 +62,19 @@ class JailbreakGame:
         # Returns True if user moved
         if pressed[pygame.K_w]:
             user.turn(UP)
-            user.move(self.resolution)
+            user.move(self.map)
             return True
         elif pressed[pygame.K_a]:
             user.turn(LEFT)
-            user.move(self.resolution)
+            user.move(self.map)
             return True
         elif pressed[pygame.K_s]:
             user.turn(DOWN)
-            user.move(self.resolution)
+            user.move(self.map)
             return True
         elif pressed[pygame.K_d]:
             user.turn(RIGHT)
-            user.move(self.resolution)
+            user.move(self.map)
             return True
         else:
             return False
@@ -108,11 +109,15 @@ if __name__ == '__main__':
     display_surface, fps_clock = game.setup()
 
     # display_surface.fill(COLORS['floor'])
-    game_map = GameMap('./GameControl/Maps/map_one.txt', display_surface)
-
+    game_map = GameMap('./GameControl/Maps/map_one.txt')
+    game_map.create_map(display_surface)
+    game.map = game_map
+    
     game.create_enemies(count=2, spawn_seeds=[(400, 500, 2), (900, 100, 3)])
+
     prot_pos = Positioning(100, 100, RIGHT)
     protagonist = Protagonist(prot_pos, PROTAGONIST_IMAGE)
+
     game_state = GameState(game.enemies, protagonist, None)
     protag_loc = protagonist.get_loc()
 
@@ -140,12 +145,8 @@ if __name__ == '__main__':
 
             #Chance enemy movement: store if enemy changed
             for e in game.enemies:
-                # #DEBUG
-                # for p in e.get_flashlight_points(ENEMY_FLASHLIGHT_MULTIPLIER):
-                    # pygame.draw.circle(display_surface, COLORS['door'], p, 4)
-                #
                 e_turned = e.chance_turn()
-                if e.chance_move(game.resolution):
+                if e.chance_move(game.map):
                     changes[e.id] = e #Store character to update                
 
 

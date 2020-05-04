@@ -15,14 +15,15 @@ COLORS = {
     'floor': (125, 125, 125),
     'obstacle': (80, 80, 80),
     'door':(255,0,0),
-    'wall': (30, 30, 30),
+    'border': (30, 30, 30),
     'flashlight': (225, 245, 164),
 }
 
 MAP_KEYS = {
-    '#': 'wall',
+    '#': 'border',
     '.': 'floor',
-    '/': 'door'
+    '/': 'door',
+    'w': 'obstacle'
 }
 
 #Game settings

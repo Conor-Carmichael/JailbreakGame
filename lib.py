@@ -38,3 +38,6 @@ def get_corner_coords(xy, size):
     x, y = xy
     width, length = size
     return [(x,y), (x+width,y), (x, y+length), (x+width, y+length)]
+
+def encode_point(xy):
+    return str(xy[0])+str(xy[1])
