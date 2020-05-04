@@ -25,6 +25,8 @@ class JailbreakGame:
         self.resolution = resolution
         self.enemies = []
         self.protagonist = None
+        self.pause = False
+        # self.camera
 
 
     def setup(self):
@@ -113,41 +115,54 @@ if __name__ == '__main__':
     protagonist = Protagonist(prot_pos, PROTAGONIST_IMAGE)
     game_state = GameState(game.enemies, protagonist, None)
     protag_loc = protagonist.get_loc()
-    print('PROTAG BOUND: ', get_corner_coords(protag_loc[0], protag_loc[1], protagonist.size))
+
     while True:
 
-        prot_moved = False
+        if not game.pause:
 
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            # if event.type == pygame.KEYDOWN:
-        keys = pygame.key.get_pressed()
-        prot_moved = game.control_handler(keys, protagonist)
+            prot_moved = False
 
-
-        # Check for updates       
-        changes = {}
-
-        # Check user changes:
-        if prot_moved:
-            changes[protagonist.id] = protagonist
-
-        #Check enemy changesd
-        for e in game.enemies:
-            e_turned = e.chance_turn()
-            if e.chance_move(game.resolution):
-                changes[e.id] = e #Store character to update                
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                # if event.type == pygame.KEYDOWN:
+            keys = pygame.key.get_pressed()
+            prot_moved = game.control_handler(keys, protagonist)
 
 
-        game.redraw(display_surface, game_state, changes) #Visually update player locations
-        if game_state.protagonist_caught():
-            print("GAME OVER")
-            quit()
+            # Check for updates       
+            changes = {}
 
-        pygame.display.update()
-        fps_clock.tick(FPS_OPTIONS[2])
+            # Check user changes:
+            if prot_moved:
+                changes[protagonist.id] = protagonist
+
+            #Chance enemy movement: store if enemy changed
+            for e in game.enemies:
+                # #DEBUG
+                # for p in e.get_flashlight_points(ENEMY_FLASHLIGHT_MULTIPLIER):
+                    # pygame.draw.circle(display_surface, COLORS['door'], p, 4)
+                #
+                e_turned = e.chance_turn()
+                if e.chance_move(game.resolution):
+                    changes[e.id] = e #Store character to update                
 
 
-    
+            game.redraw(display_surface, game_state, changes) #Visually update player locations
+
+            s, p = game_state.protagonist_caught() # Check if player in enemy sights
+            if s and p:
+                print("GAME OVER. DEBUG")
+                # display_surface.fill((255,255,255))
+                pygame.draw.circle(display_surface, COLORS['door'], s[0], 4)
+                pygame.draw.circle(display_surface, COLORS['door'], s[1], 4)
+                pygame.draw.circle(display_surface, COLORS['door'], s[2], 4)
+                pygame.draw.circle(display_surface, (255, 255, 0), p, 4)
+                game.pause = True
+
+
+            pygame.display.update()
+            fps_clock.tick(FPS_OPTIONS[2])
+
+        

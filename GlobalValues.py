@@ -23,7 +23,6 @@ MAP_KEYS = {
     '#': 'wall',
     '.': 'floor',
     '/': 'door'
-
 }
 
 #Game settings

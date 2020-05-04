@@ -29,11 +29,12 @@ def is_inside_triangle(sight_tr, player, precalc_area=None):
     # Check if sum of A1, A2 and A3  
     # is same as A 
     if(A == A1 + A2 + A3): 
-        return (True, 0) # No need for precalc area if caught, 0 is fine
+        return True, None # No need for precalc area if caught, 0 is fine
     else: 
         return (False, A) #to store the sight cone triangle area and pass as precalc area
 
 
-def get_corner_coords(x, y, size):
+def get_corner_coords(xy, size):
+    x, y = xy
     width, length = size
-    return (x, y, x+width, y+length)
+    return [(x,y), (x+width,y), (x, y+length), (x+width, y+length)]

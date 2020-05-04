@@ -32,7 +32,7 @@ class GameState:
     
     def update_light(self, key, val):
         self.light_locations[key+'-light'] = deepcopy(val)
-
+ 
 
     def protagonist_caught(self):
         main_area = None
@@ -41,14 +41,13 @@ class GameState:
         for i in range(Enemy.enemy_count):
             sight = self.light_locations['enemy-'+str(i)+'-light']
             if distance(self.get_character_loc('enemy-'+str(i)), protag_loc) <= FLASHLIGHT_RANGE:
-                for corner in get_corner_coords(protag_loc[0], protag_loc[1], self.protagonist.size): # Check if corners are in sight
-                    result, main_area = is_inside_triangle(sight, protag_loc, main_area)
-                    if result:
-                        print('Corner contact at ', corner, ' location ', protag_loc)
-                        print(sight)
-                        return True
+                for corner in get_corner_coords(protag_loc, self.protagonist.size): # Check if corners are in sight
+                    result, main_area = is_inside_triangle(sight, corner, main_area)
+                    if result: # result None if not in, the sight triangel if inside. To check how its working.
+                        print('Corner contact at ', corner, ' location ', protag_loc, '. Sight Triangle Points: ', sight)
+                        return (sight, corner)
         
-        return False
+        return (None, None) #RESET TO FALSE AFTER DEBUGGING
         
 
 

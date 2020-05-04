@@ -9,7 +9,6 @@
 import pygame
 from GlobalValues import *
 
-
 class Character:
 
 
@@ -18,6 +17,7 @@ class Character:
         self.image = pygame.image.load(image)  #Image to repr character
         image_rect = self.image.get_rect()
         self.size = (image_rect[2], image_rect[3])
+        self.rect = 
 
 
 
@@ -30,12 +30,12 @@ class Character:
         else:
             return True
 
-    def move(self, bound ):
+    def move(self, map_bound, ):
         x, y, d = self.position.get() # Row, Column, Direction
 
         if d==RIGHT:
             # dont if x + step + width > bound[0]
-            if x + STEP + self.size[0] > bound[0]:
+            if x + STEP + self.size[0] > map_bound[0]:
                 return
             self.position.update_x(x+STEP)
         elif d==LEFT:
@@ -43,7 +43,7 @@ class Character:
                 return
             self.position.update_x(x-STEP)
         elif d==DOWN:
-            if y + STEP + self.size[1] > bound[1]:
+            if y + STEP + self.size[1] > map_bound[1]:
                 return
             self.position.update_y(y+STEP)
         elif d==UP:

@@ -35,22 +35,22 @@ class Enemy(Character):
         a = self.get_loc()
         b, c = None, None 
         direction = self.get_dir()
-
+        frXw = int(self.flashlight_range*width)
         if direction==0:
-            b = (a[0]-self.flashlight_range, a[1]-self.flashlight_range*width)
-            c = (a[0]-self.flashlight_range, a[1]+self.flashlight_range*width)
+            b = (a[0]-self.flashlight_range, a[1]-frXw)
+            c = (a[0]-self.flashlight_range, a[1]+frXw)
 
         elif direction==1:
-            b = (a[0]-self.flashlight_range*width, a[1]-self.flashlight_range)
-            c = (a[0]+self.flashlight_range*width, a[1]-self.flashlight_range)
+            b = (a[0]-frXw, a[1]-self.flashlight_range)
+            c = (a[0]+frXw, a[1]-self.flashlight_range)
 
         elif direction==2:
-            b = (a[0]+self.flashlight_range, a[1]-self.flashlight_range*width)
-            c = (a[0]+self.flashlight_range, a[1]+self.flashlight_range*width)
+            b = (a[0]+self.flashlight_range, a[1]-frXw)
+            c = (a[0]+self.flashlight_range, a[1]+frXw)
             
         elif direction==3:
-            b = (a[0]-self.flashlight_range*width, a[1]+self.flashlight_range)
-            c = (a[0]+self.flashlight_range*width, a[1]+self.flashlight_range)
+            b = (a[0]-frXw, a[1]+self.flashlight_range)
+            c = (a[0]+frXw, a[1]+self.flashlight_range)
         else:
             #Should never happen....
             raise Exception('[Enemy.get_flashlight_points] Direction is unhinged!')
