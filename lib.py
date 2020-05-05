@@ -41,3 +41,9 @@ def get_corner_coords(xy, size):
 
 def encode_point(xy):
     return str(xy[0])+str(xy[1])
+
+
+def check_inbetween(a, b, c):
+    #Check if b is intbetween a and c
+    # Such that the middle of a player cant walk trhough a wall\
+    return False

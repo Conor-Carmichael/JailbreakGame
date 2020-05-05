@@ -1,5 +1,6 @@
 from GlobalValues import *
 from lib import encode_point
+import numpy as np
 
 class GameMap:
 
@@ -17,7 +18,7 @@ class GameMap:
         self.key_loc = None
         self.door_loc = None
         self.obstructions = {}
-
+        self.map_coloring = {}
 
     def create_map(self, display_surface):
         enemy_spawns = []
@@ -25,18 +26,35 @@ class GameMap:
         rows = m.readlines()
         self.height = len(rows)
         self.width = len(rows[0])
+
+        self.map_coloring = np.arange(self.width*self.height)
+
         for y, row in enumerate(rows):
             for x, pixel in enumerate(row):
-
                 if pixel != '\n' and pixel in MAP_KEYS.keys():
-                    display_surface.set_at((x, y), COLORS[MAP_KEYS[pixel]])
-                    if pixel == 'w':
+
+                    pix_color = COLORS[MAP_KEYS[pixel]]
+                    # self.map_coloring[self.width * y + x] = pix_color
+                    display_surface.set_at((x, y), pix_color)
+
+                    if pixel == '#':
                         self.obstructions[encode_point((x,y))] = True
-                    # elif pixel == '/'
-        print(self.obstructions)
+                    
         m.close()
         # return enemy_spawns, player_spawn, key_loc, walls
 
+
+    # def recolor_tri()
+
+    # def recolor_rect(self, disp, rect):
+    #     x1, y1, width, height = rect 
+    #     for x in range(x1, x1+width+1):
+    #         for y in range(y1, y1+height+1):
+    #             disp.set_at((x,y), self.get_color_at((x,y)))
+
+    def get_color_at(xy):
+        x, y = xy
+        return self.width * y + x
 
     def in_bound(self, xy):
         x, y = xy
@@ -45,7 +63,7 @@ class GameMap:
     def not_obstructed(self, xy):
         # print(self.obstructions)
         if self.obstructions.get(encode_point(xy)):
-            print('obst: ', xy)
+            # print('obst: ', xy)
             return False
         else:
             return True

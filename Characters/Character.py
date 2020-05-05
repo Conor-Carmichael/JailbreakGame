@@ -32,23 +32,31 @@ class Character:
     def move(self, game_map):
         x, y, d = self.position.get()
 
+        # For each step: check if the two boundaries in that direction arent obstructed, first make sure in bound
+
         if d==RIGHT:
             # dont if x + step + width > bound[0]
             relev_bound = (x + STEP + self.size[0], y)
-
-            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+            other_relev = (x + STEP + self.size[0], y+self.size[1])
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound) and game_map.not_obstructed(other_relev):
                 self.position.update_x(x+STEP)
+
         elif d==LEFT:
             relev_bound = (x - STEP, y)
-            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+            other_relev = (x - STEP, y+self.size[1])
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound) and game_map.not_obstructed(other_relev):
                 self.position.update_x(x-STEP)
+
         elif d==DOWN:
             relev_bound = (x, y + STEP + self.size[1])
-            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+            other_relev = (x + self.size[0], y + STEP + self.size[1])
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound) and  game_map.not_obstructed(other_relev):
                 self.position.update_y(y+STEP)
+                
         elif d==UP:
             relev_bound = (x, y - STEP)
-            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound):
+            other_relev = (x+self.size[0], y - STEP)
+            if game_map.in_bound(relev_bound) and game_map.not_obstructed(relev_bound) and game_map.not_obstructed(other_relev):
                 self.position.update_y(y-STEP)
 
         

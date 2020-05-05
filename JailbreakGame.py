@@ -83,13 +83,13 @@ class JailbreakGame:
         # new state values are the character and the type of character
         for character in new_state.values():
             #Get location to erase
-            old_loc = game_state.get_character_loc(character.id)
-            to_erase = (old_loc[0] , old_loc[1], character.size[0], character.size[1])
+            # old_loc = game_state.get_character_loc(character.id)
+            # to_erase = (old_loc[0] , old_loc[1], character.size[0], character.size[1])
 
-            display_surface.fill(COLORS['floor'], to_erase) # Erase at old character
+            # display_surface.fill(COLORS['floor'], to_erase) # Erase at old character
 
             if 'enemy' in character.id:
-                pygame.draw.polygon(display_surface, COLORS['floor'], game_state.get_enemy_light_loc(character.id))  # Erase old light
+                # pygame.draw.polygon(display_surface, COLORS['floor'], game_state.get_enemy_light_loc(character.id))  # Erase old light
                 new_light_points = character.get_flashlight_points(ENEMY_FLASHLIGHT_MULTIPLIER)
                 pygame.draw.polygon(display_surface, 
                                     COLORS['flashlight'], 
@@ -109,17 +109,19 @@ if __name__ == '__main__':
     display_surface, fps_clock = game.setup()
 
     # display_surface.fill(COLORS['floor'])
-    game_map = GameMap('./GameControl/Maps/map_one.txt')
+    game_map = GameMap(MAP_OPTIONS[0])
     game_map.create_map(display_surface)
     game.map = game_map
     
     game.create_enemies(count=2, spawn_seeds=[(400, 500, 2), (900, 100, 3)])
 
-    prot_pos = Positioning(100, 100, RIGHT)
+    prot_pos    = Positioning(100, 100, RIGHT)
     protagonist = Protagonist(prot_pos, PROTAGONIST_IMAGE)
 
     game_state = GameState(game.enemies, protagonist, None)
     protag_loc = protagonist.get_loc()
+
+    
 
     while True:
 
@@ -135,22 +137,26 @@ if __name__ == '__main__':
             keys = pygame.key.get_pressed()
             prot_moved = game.control_handler(keys, protagonist)
 
+            print('Prot rect: ', protagonist.image)
 
             # Check for updates       
-            changes = {}
+            changes = []
 
             # Check user changes:
             if prot_moved:
-                changes[protagonist.id] = protagonist
+                display_surface.blit(protagonist.image, protagonist.get_loc())
+                changes.append(protagonist.image.get_rect())
 
             #Chance enemy movement: store if enemy changed
             for e in game.enemies:
                 e_turned = e.chance_turn()
                 if e.chance_move(game.map):
-                    changes[e.id] = e #Store character to update                
+                    display_surface.blit(e.image, e.get_loc())
+                    changes.append(e.image.get_rect()) #Store character to update                
 
 
-            game.redraw(display_surface, game_state, changes) #Visually update player locations
+            # game.redraw(display_surface, game_state, changes) #Visually update player locations
+
 
             s, p = game_state.protagonist_caught() # Check if player in enemy sights
             if s and p:
@@ -162,8 +168,8 @@ if __name__ == '__main__':
                 pygame.draw.circle(display_surface, (255, 255, 0), p, 4)
                 game.pause = True
 
-
-            pygame.display.update()
+            print(changes)
+            pygame.display.update(changes)
             fps_clock.tick(FPS_OPTIONS[2])
 
         
