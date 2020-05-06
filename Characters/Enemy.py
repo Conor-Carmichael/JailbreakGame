@@ -19,7 +19,7 @@ class Enemy(Character):
         # Pass character attributes up
         super().__init__(positioning, image)
         self.id = 'enemy-'+str(Enemy.enemy_count)
-
+        
         self.flashlight_range = self.check_light_range(flashlight_range)
         self.turn_p = 0.01                #Probability of turning at each tick
         self.movement_p = 0.01            #Probability of taking a step at each tick
@@ -30,9 +30,9 @@ class Enemy(Character):
         Enemy.enemy_count += 1
 
 
-    def get_flashlight_points(self, width=1.0):
+    def get_flashlight_points(self, width=ENEMY_FLASHLIGHT_MULTIPLIER):
         # Width is scaling factore for 'flashlight' width. 1.0 makes a right isoceles.
-        a = self.get_loc()
+        a = (self.rect[0], self.rect[1])
         b, c = None, None 
         direction = self.get_dir()
         frXw = int(self.flashlight_range*width)

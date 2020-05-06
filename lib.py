@@ -47,3 +47,7 @@ def check_inbetween(a, b, c):
     #Check if b is intbetween a and c
     # Such that the middle of a player cant walk trhough a wall\
     return False
+
+
+def get_rect_position(r, xy, size):
+    return

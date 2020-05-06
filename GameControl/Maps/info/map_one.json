@@ -1,0 +1,7 @@
+{
+    "enemy_spawns": [[900, 500],[800, 600]],
+    "protagonist_spawn": [25, 25],
+    "key_spawn":  [1800, 900],
+    "door_span": [[0,0],[20, 0]],
+    "obstruction_dict": {}
+}

@@ -7,7 +7,7 @@ DIRECTIONS = [LEFT, UP, RIGHT, DOWN]
 
 
 #Character related
-STEP = 1
+STEP = 2
 ENEMY_FLASHLIGHT_MULTIPLIER = 0.6
 FLASHLIGHT_RANGE = 200
 
@@ -16,24 +16,20 @@ ENEMY_IMG = './Images/Enemy.png'
 
 
 #Maps
-MAP_OPTIONS = os.listdir(os.path.join('GameControl','Maps'))
-for m in range(len(MAP_OPTIONS)):
-    MAP_OPTIONS[m] = os.path.join('GameControl','Maps', MAP_OPTIONS[m])
+MAP_IMAGES_PATH = os.path.join('GameControl','Maps', 'images')
+MAP_INFO_PATH = os.path.join('GameControl','Maps', 'info')
+MAP_FILE_NAMES = os.listdir(MAP_IMAGES_PATH) # info and image directories need to share file name
+
+
 
 COLORS = {
-    'floor': (125, 125, 125),
-    'wall': (80, 80, 80),
+    'floor': (120, 100, 55),
+    'wall': (0, 0, 0),
     'door':(255,0,0),
     'border': (30, 30, 30),
     'flashlight': (225, 245, 164),
 }
 
-MAP_KEYS = {
-    '#': 'wall',
-    '.': 'floor',
-    '/': 'door'
-    # 'w': 'obstacle'
-}
 
 
 #Game settings

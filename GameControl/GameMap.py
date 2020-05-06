@@ -1,56 +1,58 @@
 from GlobalValues import *
 from lib import encode_point
+
+import os, json, pygame
 import numpy as np
 
-class GameMap:
+
+class GameMap(pygame.sprite.Sprite):
 
     def __init__(self, map_file):
-        self.map_file = map_file
+        #Necessary sprite super call
+        pygame.sprite.Sprite.__init__(self)
+        
+        # Info used for further setup
+        img_path = os.path.join(MAP_IMAGES_PATH, map_file)
+        info_path =  os.path.join(MAP_INFO_PATH, map_file) #store because it is used in parse map info
+        info_path = info_path[:-4]+'.json' #remove .png, use .json
 
-        # Rest set by call to 'create_map()'
-        #map dimens
-        self.width = None
-        self.height = None
+        #Sprite info    
+        self.image = pygame.image.load(img_path)
+        self.rect = self.image.get_rect()
 
-        #Map locations
-        self.protagonist_spawn = None
-        self.enemy_spawns = None
-        self.key_loc = None
-        self.door_loc = None
-        self.obstructions = {}
-        self.map_coloring = {}
+        #Map dimens
+        self.width = self.rect[2]
+        self.height = self.rect[3]
+        print(self.width, self.height)
 
-    def create_map(self, display_surface):
-        enemy_spawns = []
-        m = open(self.map_file, 'r')
-        rows = m.readlines()
-        self.height = len(rows)
-        self.width = len(rows[0])
+        #Map locations 
+        self.protagonist_spawn, self.enemy_spawns, self.key_spawn, self.door_span = self.parse_map_info(info_path)
+        self.obstructions = self.set_obstruction_list()
 
-        self.map_coloring = np.arange(self.width*self.height)
-
-        for y, row in enumerate(rows):
-            for x, pixel in enumerate(row):
-                if pixel != '\n' and pixel in MAP_KEYS.keys():
-
-                    pix_color = COLORS[MAP_KEYS[pixel]]
-                    # self.map_coloring[self.width * y + x] = pix_color
-                    display_surface.set_at((x, y), pix_color)
-
-                    if pixel == '#':
-                        self.obstructions[encode_point((x,y))] = True
-                    
-        m.close()
-        # return enemy_spawns, player_spawn, key_loc, walls
+        self.num_enemies = len(self.enemy_spawns)
 
 
-    # def recolor_tri()
+    def parse_map_info(self, fp):
+        # to run in init
+        info = open(fp, )
+        info = json.load(info)
+        #Coordinates are in the form y, x
+        protagonist_spawn = info['protagonist_spawn']
+        enemy_spawns = info['enemy_spawns']
+        key_spawn = info['key_spawn']
+        door_span = info['door_span']
+        return protagonist_spawn, enemy_spawns, key_spawn, door_span
 
-    # def recolor_rect(self, disp, rect):
-    #     x1, y1, width, height = rect 
-    #     for x in range(x1, x1+width+1):
-    #         for y in range(y1, y1+height+1):
-    #             disp.set_at((x,y), self.get_color_at((x,y)))
+    def set_obstruction_list(self):
+        obst = {}
+        for x in range(self.width):
+            for y in range(self.height):
+                val = self.image.get_at((x,y))
+                if val == COLORS['wall']:
+                    obst[encode_point((x,y))] = True
+
+        return obst
+
 
     def get_color_at(xy):
         x, y = xy
@@ -63,7 +65,7 @@ class GameMap:
     def not_obstructed(self, xy):
         # print(self.obstructions)
         if self.obstructions.get(encode_point(xy)):
-            # print('obst: ', xy)
+            print('obst: ', xy)
             return False
         else:
             return True
